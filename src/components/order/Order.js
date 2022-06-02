@@ -1,5 +1,5 @@
-import React, {  useState } from "react";
-import {  Button, TextField } from "@mui/material"
+import React, {  useEffect, useState } from "react";
+import {  Button, TextField, Select, MenuItem } from "@mui/material"
 import axios from "axios";
 import CryptoJS from 'crypto-js'
 
@@ -21,6 +21,7 @@ const Order = () => {
     }
 
     const [order, setOrder] = useState(payload)
+    const [assets, setAssets] = useState([])
 
     const onChange = (e) => {
         const { name, value } = e.target;
@@ -28,7 +29,23 @@ const Order = () => {
           ...order,
           [name]: value
         }); 
+        console.log(order)
     };
+
+    const getAssets = () => {
+        axios.get("http://localhost:8080/api/public/bitvavo/assets")
+        .then((response) => {
+            console.log(response.data)
+            setAssets(response.data)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    }
+
+    useEffect(() => {
+        getAssets()
+    }, [])
 
     const postOrder = () => {
         const time = Date.now()
@@ -50,27 +67,33 @@ const Order = () => {
             console.log(error)
         })
 
+        console.log(payload)
+
                 
     }
 
     return(
         <div>
+            {assets &&
+                <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    name="market"
+                    value={assets[0]}
+                    label="Asset"
+                    onChange={onChange}
+                >
+                    {assets.map((asset) =>(
+                        <MenuItem name='market' value={asset.symbol}>{asset.symbol}</MenuItem>
+                    ))}
+                </Select>
+            }
             <TextField
                 margin="dense"
                 id="market"
                 label="Asset"
                 type="market"
                 name="market"
-                fullWidth
-                variant="standard"
-                onChange={onChange}
-            />
-            <TextField
-                margin="dense"
-                id="amount"
-                label="Amount"
-                type="amount"
-                name="amount"
                 fullWidth
                 variant="standard"
                 onChange={onChange}

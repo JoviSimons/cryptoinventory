@@ -37,11 +37,8 @@ const Order = () => {
         payload.market = `${order.market}-EUR`
         payload.timestamp = time
 
-        const query = `${time}POST/v2/order{"market":"${payload.market}",
-        "side":"${payload.side}",
-        "orderType":"${payload.orderType}",
-        "amount":"${payload.amount}"}`
-        
+        const query = `${time}POST/v2/order{"market":"${payload.market}","side":"${payload.side}","orderType":"${payload.orderType}","amount":"${payload.amount}"}`
+
         const signature = CryptoJS.HmacSHA256(query, keys.skey).toString(CryptoJS.enc.Hex)
         payload.signature = signature
 
@@ -52,6 +49,7 @@ const Order = () => {
         .catch((error) => {
             console.log(error)
         })
+
                 
     }
 

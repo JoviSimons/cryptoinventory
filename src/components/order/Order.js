@@ -90,10 +90,10 @@ const Order = () => {
             }
             <TextField
                 margin="dense"
-                id="market"
+                id="amount"
                 label="Asset"
-                type="market"
-                name="market"
+                type="amount"
+                name="amount"
                 fullWidth
                 variant="standard"
                 onChange={onChange}
